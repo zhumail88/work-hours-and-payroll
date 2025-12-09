@@ -1,0 +1,5 @@
+{
+  "name": "Salary & Hours Tracker",
+  "description": "A modern application to track working hours, calculate earned salary based on monthly configurations, and visualize work-life balance.",
+  "requestFramePermissions": []
+}
