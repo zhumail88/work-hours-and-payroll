@@ -62,6 +62,19 @@ const App: React.FC = () => {
     }
   }, [darkMode]);
 
+  // Prevent background scroll when modals are open
+  useEffect(() => {
+    if (isFormOpen || isSettingsOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isFormOpen, isSettingsOpen]);
+
   // Onboarding Effect
   useEffect(() => {
     if (user && !dataLoading) {
@@ -173,6 +186,18 @@ const App: React.FC = () => {
           </div>
         </div>
       </header>
+
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-slate-900 dark:to-indigo-950/30 border-b border-indigo-100 dark:border-slate-800">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">
+            Welcome, <span className="text-indigo-600 dark:text-indigo-400">{user.displayName || user.email?.split('@')[0] || 'User'}</span>! 👋
+          </h2>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Track your work hours and manage your salary efficiently
+          </p>
+        </div>
+      </div>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         {dataLoading ? (
