@@ -78,8 +78,13 @@ const App: React.FC = () => {
   // Onboarding Effect
   useEffect(() => {
     if (user && !dataLoading) {
-      if (!settings.onboarded) {
+      // Check if this is the first time the user is logging in
+      const hasSeenOnboarding = localStorage.getItem(`onboarding_${user.uid}`);
+
+      if (!settings.onboarded && !hasSeenOnboarding) {
         setIsSettingsOpen(true);
+        // Mark that user has seen the onboarding modal
+        localStorage.setItem(`onboarding_${user.uid}`, 'true');
       }
     }
   }, [user, dataLoading, settings.onboarded]);

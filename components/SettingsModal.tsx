@@ -45,8 +45,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ settings, onSave, 
             <input
               type="number"
               required
-              value={formData.monthlySalary}
-              onChange={(e) => setFormData({ ...formData, monthlySalary: Number(e.target.value) })}
+              value={formData.monthlySalary === 0 ? '' : formData.monthlySalary}
+              onChange={(e) => setFormData({ ...formData, monthlySalary: e.target.value === '' ? 0 : Number(e.target.value) })}
+              placeholder="0"
               className="w-full px-4 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-slate-700 dark:text-white"
             />
           </div>

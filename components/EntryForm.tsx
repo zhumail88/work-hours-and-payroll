@@ -155,8 +155,9 @@ export const EntryForm: React.FC<EntryFormProps> = ({ onSave, onCancel, initialD
                 <input
                   type="number"
                   min="0"
-                  value={breakDuration}
-                  onChange={(e) => setBreakDuration(Number(e.target.value))}
+                  value={breakDuration === 0 ? '' : breakDuration}
+                  onChange={(e) => setBreakDuration(e.target.value === '' ? 0 : Number(e.target.value))}
+                  placeholder="0"
                   disabled={isWfhOnly}
                   className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-700 dark:text-white disabled:bg-slate-100 dark:disabled:bg-slate-900"
                 />
@@ -175,8 +176,8 @@ export const EntryForm: React.FC<EntryFormProps> = ({ onSave, onCancel, initialD
                 <input
                   type="number"
                   min="0"
-                  value={wfhHoursInput}
-                  onChange={(e) => setWfhHoursInput(Math.max(0, parseInt(e.target.value) || 0))}
+                  value={wfhHoursInput === 0 ? '' : wfhHoursInput}
+                  onChange={(e) => setWfhHoursInput(e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value)))}
                   placeholder="0"
                   className="w-full pl-10 pr-12 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-700 dark:text-white"
                 />
@@ -187,8 +188,8 @@ export const EntryForm: React.FC<EntryFormProps> = ({ onSave, onCancel, initialD
                   type="number"
                   min="0"
                   max="59"
-                  value={wfhMinutesInput}
-                  onChange={(e) => setWfhMinutesInput(Math.max(0, parseInt(e.target.value) || 0))}
+                  value={wfhMinutesInput === 0 ? '' : wfhMinutesInput}
+                  onChange={(e) => setWfhMinutesInput(e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value)))}
                   placeholder="0"
                   className="w-full pl-4 pr-12 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-700 dark:text-white"
                 />
