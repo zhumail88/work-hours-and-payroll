@@ -146,7 +146,7 @@ const App: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-indigo-600 p-2 rounded-lg shadow-sm">
-              <img src="/working-hour.png" alt="SalaryTrack Logo" className="w-5 h-5" />
+              <img src="/working-hours.png" alt="SalaryTrack Logo" className="w-5 h-5" />
             </div>
             <h1 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight hidden sm:block">
               Salary<span className="text-indigo-600 dark:text-indigo-400">Track</span>
