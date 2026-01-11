@@ -3,19 +3,19 @@ import { useState, useEffect, useMemo } from 'react';
 import { DailyEntry, AppSettings, MonthStats } from '../types';
 import { getMonthKey, getWorkingDaysInMonth, getWorkingDaysUpToDate } from '../utils';
 import { db } from '../lib/firebase';
-import { 
-  collection, 
-  doc, 
-  setDoc, 
-  deleteDoc, 
-  onSnapshot, 
-  query, 
-  orderBy 
+import {
+  collection,
+  doc,
+  setDoc,
+  deleteDoc,
+  onSnapshot,
+  query,
+  orderBy
 } from 'firebase/firestore';
 import { useToast } from '../components/Toast';
 
 const DEFAULT_SETTINGS: AppSettings = {
-  monthlySalary: 85000,
+  monthlySalary: 0,
   standardHoursPerDay: 8,
   currency: 'PKR',
   onboarded: false,
@@ -41,11 +41,11 @@ export const useWorkData = (userId: string | undefined) => {
     // Entries Listener
     const entriesRef = collection(db, 'users', userId, 'entries');
     const q = query(entriesRef, orderBy('date', 'desc'));
-    
+
     const unsubEntries = onSnapshot(q, (snapshot) => {
-      const fetchedEntries = snapshot.docs.map(doc => ({ 
-        id: doc.id, 
-        ...doc.data() 
+      const fetchedEntries = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
       })) as DailyEntry[];
       setEntries(fetchedEntries);
       // We only consider "loading" done when we have at least the entries listener active
@@ -58,9 +58,20 @@ export const useWorkData = (userId: string | undefined) => {
 
     // Settings Listener
     const settingsRef = doc(db, 'users', userId, 'settings', 'config');
-    const unsubSettings = onSnapshot(settingsRef, (docSnap) => {
+    const unsubSettings = onSnapshot(settingsRef, async (docSnap) => {
       if (docSnap.exists()) {
         setSettings(docSnap.data() as AppSettings);
+      } else {
+        // If no settings exist, save the defaults to Firebase
+        // This ensures the onboarding state persists
+        try {
+          await setDoc(settingsRef, DEFAULT_SETTINGS);
+          setSettings(DEFAULT_SETTINGS);
+        } catch (error) {
+          console.error("Error initializing settings:", error);
+          // Still set local state even if save fails
+          setSettings(DEFAULT_SETTINGS);
+        }
       }
       // Note: We don't block loading on settings, as defaults work fine
     });
@@ -125,28 +136,28 @@ export const useWorkData = (userId: string | undefined) => {
     // 2. Expected Working Hours
     const now = new Date();
     const isCurrentMonth = now.getFullYear() === year && now.getMonth() === month;
-    
+
     let workingDaysSoFar = 0;
     if (isCurrentMonth) {
-        workingDaysSoFar = getWorkingDaysUpToDate(now.toISOString());
+      workingDaysSoFar = getWorkingDaysUpToDate(now.toISOString());
     } else if (now < new Date(year, month, 1)) {
-        workingDaysSoFar = 0;
+      workingDaysSoFar = 0;
     } else {
-        workingDaysSoFar = getWorkingDaysInMonth(year, month);
+      workingDaysSoFar = getWorkingDaysInMonth(year, month);
     }
-    
+
     const expectedHoursToDate = workingDaysSoFar * settings.standardHoursPerDay;
 
     // 3. Salary Calculation
     const totalWorkingDaysInMonth = getWorkingDaysInMonth(year, month);
     const monthlyWorkingHours = totalWorkingDaysInMonth * settings.standardHoursPerDay;
-    
+
     const hourlyRate = monthlyWorkingHours > 0 ? settings.monthlySalary / monthlyWorkingHours : 0;
-    
+
     const earnedSalary = totalWorkedHours * hourlyRate;
 
-    const completionPercentage = monthlyWorkingHours > 0 
-      ? Math.min(100, (totalWorkedHours / monthlyWorkingHours) * 100) 
+    const completionPercentage = monthlyWorkingHours > 0
+      ? Math.min(100, (totalWorkedHours / monthlyWorkingHours) * 100)
       : 0;
 
     return {

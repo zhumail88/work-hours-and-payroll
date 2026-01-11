@@ -8,14 +8,14 @@ import { SettingsModal } from './components/SettingsModal';
 import { WorkChart } from './components/WorkChart';
 import { Login } from './components/Login';
 import { formatCurrency, formatDate } from './utils';
-import { 
-  Plus, 
-  Settings, 
-  ChevronLeft, 
-  ChevronRight, 
-  Briefcase, 
-  Clock, 
-  DollarSign, 
+import {
+  Plus,
+  Settings,
+  ChevronLeft,
+  ChevronRight,
+  Briefcase,
+  Clock,
+  DollarSign,
   TrendingUp,
   Trash2,
   Edit2,
@@ -28,14 +28,14 @@ import { DailyEntry } from './types';
 
 const App: React.FC = () => {
   const { user, loading: authLoading, loginGoogle, loginEmail, registerEmail, logout } = useAuth();
-  const { 
-    entries, 
-    settings, 
-    currentDate, 
-    setCurrentDate, 
-    stats, 
-    addOrUpdateEntry, 
-    deleteEntry, 
+  const {
+    entries,
+    settings,
+    currentDate,
+    setCurrentDate,
+    stats,
+    addOrUpdateEntry,
+    deleteEntry,
     updateSettings,
     loading: dataLoading
   } = useWorkData(user?.uid);
@@ -45,7 +45,7 @@ const App: React.FC = () => {
   const [editingEntry, setEditingEntry] = useState<DailyEntry | null>(null);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') === 'dark' || 
+      return localStorage.getItem('theme') === 'dark' ||
         (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
     return false;
@@ -69,7 +69,7 @@ const App: React.FC = () => {
     } else {
       document.body.style.overflow = 'unset';
     }
-    
+
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -119,13 +119,13 @@ const App: React.FC = () => {
   );
 
   if (!user) return (
-    <Login 
-      onGoogleLogin={loginGoogle} 
-      onEmailLogin={loginEmail} 
+    <Login
+      onGoogleLogin={loginGoogle}
+      onEmailLogin={loginEmail}
       onRegister={registerEmail}
     />
   );
-  
+
   // Filter entries for list view (current month only)
   const currentMonthEntries = entries.filter(e => {
     const d = new Date(e.date);
@@ -141,7 +141,7 @@ const App: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="bg-indigo-600 p-2 rounded-lg shadow-sm">
-              <TrendingUp className="text-white" size={20} />
+              <img src="/working-hour.png" alt="SalaryTrack Logo" className="w-5 h-5" />
             </div>
             <h1 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight hidden sm:block">
               Salary<span className="text-indigo-600 dark:text-indigo-400">Track</span>
@@ -161,14 +161,14 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={toggleTheme}
               className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
               title="Toggle Theme"
             >
               {darkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            <button 
+            <button
               onClick={() => setIsSettingsOpen(true)}
               className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
               title="Settings"
@@ -176,7 +176,7 @@ const App: React.FC = () => {
               <Settings size={20} />
             </button>
             <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
-            <button 
+            <button
               onClick={logout}
               className="p-2 text-rose-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition-colors"
               title="Logout"
@@ -191,58 +191,58 @@ const App: React.FC = () => {
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-slate-900 dark:to-indigo-950/30 border-b border-indigo-100 dark:border-slate-800">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">
-            Welcome, <span className="text-indigo-600 dark:text-indigo-400">{user.displayName || user.email?.split('@')[0] || 'User'}</span>! 👋
+            Welcome, <span className="text-indigo-600 dark:text-indigo-400">{user.displayName || user.email?.split('@')[0] || 'User'}</span>!
           </h2>
           <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Track your work hours and manage your salary efficiently
+            Track your work hours and salary efficiently
           </p>
         </div>
       </div>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         {dataLoading ? (
-           // Skeleton Loader
-           <div className="animate-pulse space-y-8">
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="h-32 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
-                ))}
-             </div>
-             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 h-96 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
-                <div className="h-96 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
-             </div>
-           </div>
+          // Skeleton Loader
+          <div className="animate-pulse space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="h-32 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+              ))}
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 h-96 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+              <div className="h-96 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+            </div>
+          </div>
         ) : (
           <>
             {/* Statistics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-in slide-in-from-bottom-4 duration-500">
-              <StatCard 
-                title="Earned Salary" 
-                value={formatCurrency(stats.earnedSalary, settings.currency)} 
+              <StatCard
+                title="Earned Salary"
+                value={formatCurrency(stats.earnedSalary, settings.currency)}
                 subtitle={`Rate: ${formatCurrency(stats.hourlyRate, settings.currency)}/hr`}
                 icon={<DollarSign size={24} className="text-emerald-500" />}
                 colorClass="bg-gradient-to-br from-white to-emerald-50/50 dark:from-slate-800 dark:to-emerald-900/20"
               />
-              <StatCard 
-                title="Total Worked" 
-                value={`${stats.totalWorkedHours.toFixed(1)}h`} 
+              <StatCard
+                title="Total Worked"
+                value={`${stats.totalWorkedHours.toFixed(1)}h`}
                 subtitle={`${stats.completionPercentage.toFixed(1)}% of month`}
                 icon={<Clock size={24} className="text-indigo-500" />}
               />
-              <StatCard 
-                title="Expected" 
-                value={`${stats.expectedHoursToDate.toFixed(1)}h`} 
+              <StatCard
+                title="Expected"
+                value={`${stats.expectedHoursToDate.toFixed(1)}h`}
                 subtitle="Based on elapsed days"
                 icon={<Briefcase size={24} className="text-blue-500" />}
               />
-              <StatCard 
-                title="Balance" 
-                value={`${hoursDiff > 0 ? '+' : ''}${hoursDiff.toFixed(1)}h`} 
+              <StatCard
+                title="Balance"
+                value={`${hoursDiff > 0 ? '+' : ''}${hoursDiff.toFixed(1)}h`}
                 subtitle={hoursDiff >= 0 ? "Ahead of schedule" : "Behind schedule"}
                 icon={<TrendingUp size={24} className={hoursDiff >= 0 ? "text-emerald-500" : "text-rose-500"} />}
-                colorClass={hoursDiff >= 0 
-                  ? "bg-emerald-50/30 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-900/30" 
+                colorClass={hoursDiff >= 0
+                  ? "bg-emerald-50/30 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-900/30"
                   : "bg-rose-50/30 border-rose-100 dark:bg-rose-900/10 dark:border-rose-900/30"}
               />
             </div>
@@ -257,7 +257,7 @@ const App: React.FC = () => {
 
                 <div className="flex justify-between items-center animate-in fade-in duration-500 delay-150">
                   <h2 className="text-lg font-bold text-slate-800 dark:text-white">History ({currentMonthEntries.length})</h2>
-                  <button 
+                  <button
                     onClick={handleAddNew}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-md shadow-indigo-200 dark:shadow-none transition-all flex items-center gap-2 text-sm font-medium"
                   >
@@ -331,15 +331,15 @@ const App: React.FC = () => {
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
                   <h3 className="text-slate-300 font-medium mb-1">Estimated Payout</h3>
                   <div className="text-4xl font-bold tracking-tight mb-4">{formatCurrency(stats.earnedSalary, settings.currency)}</div>
-                  
+
                   <div className="space-y-4">
                     <div className="flex justify-between text-sm text-slate-400">
                       <span>Monthly Goal</span>
                       <span className="text-white">{formatCurrency(settings.monthlySalary, settings.currency)}</span>
                     </div>
                     <div className="w-full bg-slate-800 dark:bg-slate-950 rounded-full h-2">
-                      <div 
-                        className="bg-emerald-500 h-2 rounded-full transition-all duration-1000" 
+                      <div
+                        className="bg-emerald-500 h-2 rounded-full transition-all duration-1000"
                         style={{ width: `${stats.completionPercentage}%` }}
                       ></div>
                     </div>
@@ -349,7 +349,7 @@ const App: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
                   <h3 className="font-bold text-slate-800 dark:text-white mb-4">Month Details</h3>
                   <ul className="space-y-3 text-sm">
@@ -378,18 +378,18 @@ const App: React.FC = () => {
       </main>
 
       {isFormOpen && (
-        <EntryForm 
-          onSave={handleSaveEntry} 
-          onCancel={() => setIsFormOpen(false)} 
+        <EntryForm
+          onSave={handleSaveEntry}
+          onCancel={() => setIsFormOpen(false)}
           initialData={editingEntry}
           selectedDate={new Date()}
         />
       )}
 
       {isSettingsOpen && (
-        <SettingsModal 
-          settings={settings} 
-          onSave={updateSettings} 
+        <SettingsModal
+          settings={settings}
+          onSave={updateSettings}
           onClose={() => setIsSettingsOpen(false)}
           isOnboarding={!settings.onboarded}
         />
