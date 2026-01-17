@@ -22,7 +22,9 @@ import {
   LogOut,
   Moon,
   Sun,
-  Loader2
+  Loader2,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { DailyEntry } from './types';
 
@@ -49,6 +51,14 @@ const App: React.FC = () => {
         (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
     return false;
+  });
+
+  const [salaryVisible, setSalaryVisible] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('salaryVisible');
+      return saved !== null ? saved === 'true' : true;
+    }
+    return true;
   });
 
   // Dark Mode Effect
@@ -90,6 +100,12 @@ const App: React.FC = () => {
   }, [user, dataLoading, settings.onboarded]);
 
   const toggleTheme = () => setDarkMode(!darkMode);
+
+  const toggleSalaryVisibility = () => {
+    const newValue = !salaryVisible;
+    setSalaryVisible(newValue);
+    localStorage.setItem('salaryVisible', String(newValue));
+  };
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -225,9 +241,23 @@ const App: React.FC = () => {
               <StatCard
                 title="Earned Salary"
                 value={formatCurrency(stats.earnedSalary, settings.currency)}
-                subtitle={`Rate: ${formatCurrency(stats.hourlyRate, settings.currency)}/hr`}
+                subtitle={salaryVisible
+                  ? `Rate: ${formatCurrency(stats.hourlyRate, settings.currency)}/hr`
+                  : `Rate: ${settings.currency === 'PKR' ? 'Rs.' : settings.currency === 'USD' ? '$' : '€'} •••••/hr`
+                }
                 icon={<DollarSign size={24} className="text-emerald-500" />}
                 colorClass="bg-gradient-to-br from-white to-emerald-50/50 dark:from-slate-800 dark:to-emerald-900/20"
+                isHidden={!salaryVisible}
+                maskedValue={`${settings.currency === 'PKR' ? 'Rs.' : settings.currency === 'USD' ? '$' : '€'} •••••`}
+                toggleButton={
+                  <button
+                    onClick={toggleSalaryVisibility}
+                    className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                    title={salaryVisible ? "Hide salary" : "Show salary"}
+                  >
+                    {salaryVisible ? <Eye size={16} className="text-slate-400" /> : <EyeOff size={16} className="text-slate-400" />}
+                  </button>
+                }
               />
               <StatCard
                 title="Total Worked"
@@ -334,13 +364,32 @@ const App: React.FC = () => {
               <div className="space-y-6 animate-in slide-in-from-right-4 duration-500 delay-300">
                 <div className="bg-slate-900 dark:bg-slate-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden transition-colors">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
-                  <h3 className="text-slate-300 font-medium mb-1">Estimated Payout</h3>
-                  <div className="text-4xl font-bold tracking-tight mb-4">{formatCurrency(stats.earnedSalary, settings.currency)}</div>
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="text-slate-300 font-medium">Estimated Payout</h3>
+                    <button
+                      onClick={toggleSalaryVisibility}
+                      className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                      title={salaryVisible ? "Hide salary" : "Show salary"}
+                    >
+                      {salaryVisible ? <Eye size={18} className="text-slate-300" /> : <EyeOff size={18} className="text-slate-300" />}
+                    </button>
+                  </div>
+                  <div className="text-4xl font-bold tracking-tight mb-4">
+                    {salaryVisible
+                      ? formatCurrency(stats.earnedSalary, settings.currency)
+                      : `${settings.currency === 'PKR' ? 'Rs.' : settings.currency === 'USD' ? '$' : '€'} •••••`
+                    }
+                  </div>
 
                   <div className="space-y-4">
                     <div className="flex justify-between text-sm text-slate-400">
                       <span>Monthly Goal</span>
-                      <span className="text-white">{formatCurrency(settings.monthlySalary, settings.currency)}</span>
+                      <span className="text-white">
+                        {salaryVisible
+                          ? formatCurrency(settings.monthlySalary, settings.currency)
+                          : `${settings.currency === 'PKR' ? 'Rs.' : settings.currency === 'USD' ? '$' : '€'} •••••`
+                        }
+                      </span>
                     </div>
                     <div className="w-full bg-slate-800 dark:bg-slate-950 rounded-full h-2">
                       <div
@@ -368,7 +417,12 @@ const App: React.FC = () => {
                     </li>
                     <li className="flex justify-between py-2 border-b border-slate-50 dark:border-slate-800">
                       <span className="text-slate-500 dark:text-slate-400">Hourly Rate</span>
-                      <span className="font-medium text-slate-800 dark:text-slate-200">{formatCurrency(stats.hourlyRate, settings.currency)}</span>
+                      <span className="font-medium text-slate-800 dark:text-slate-200">
+                        {salaryVisible
+                          ? formatCurrency(stats.hourlyRate, settings.currency)
+                          : `${settings.currency === 'PKR' ? 'Rs.' : settings.currency === 'USD' ? '$' : '€'} •••••`
+                        }
+                      </span>
                     </li>
                     <li className="flex justify-between py-2 pt-3">
                       <span className="text-slate-500 dark:text-slate-400">WFH Hours Logged</span>
