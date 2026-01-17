@@ -291,7 +291,7 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="flex justify-between items-center animate-in fade-in duration-500 delay-150">
-                  <h2 className="text-lg font-bold text-slate-800 dark:text-white">History ({currentMonthEntries.length})</h2>
+                  <h2 className="text-lg font-bold text-slate-800 dark:text-white">History</h2>
                   <button
                     onClick={handleAddNew}
                     className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-md shadow-indigo-200 dark:shadow-none transition-all flex items-center gap-2 text-sm font-medium"
